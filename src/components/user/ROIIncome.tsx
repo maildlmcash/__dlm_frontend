@@ -189,7 +189,7 @@ const ROIIncome = () => {
                   <p className="text-xs sm:text-sm text-orange-700 mb-3">
                     You need to meet the basic referral requirements to qualify for the salary income system.
                   </p>
-                  
+
                   <div className="bg-orange-100 rounded-lg p-3 sm:p-4 border border-orange-300 mb-3">
                     <h3 className="font-semibold text-orange-900 mb-2 text-sm sm:text-base">📋 Requirements to Qualify:</h3>
                     <ul className="space-y-2 text-xs sm:text-sm text-orange-800">
@@ -306,313 +306,312 @@ const ROIIncome = () => {
         )}
 
         {/* No Levels Configured - Admin hasn't set up salary levels yet */}
-        {!salaryData?.qualificationTimeExpired && salaryData?.levelStatus !== 'DISQUALIFIED' && 
-         salaryData?.totalLevelsAvailable === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-          >
-            <GlassCard className="bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-400">
-              <div className="flex items-start gap-4">
-                <div className="text-6xl">🚧</div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-yellow-900 mb-2">
-                    Salary System Configuration In Progress
-                  </h2>
-                  <p className="text-yellow-700 mb-4">
-                    The salary income system is being set up by the administrators. Salary levels are not yet configured.
-                  </p>
-                  
-                  {salaryData?.meetsReferralRequirement ? (
-                    <div className="bg-green-100 rounded-lg p-5 border border-green-300 mb-4">
-                      <h3 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
-                        <span>✅</span> You've Already Qualified!
-                      </h3>
-                      <p className="text-sm text-green-800">
-                        Great news! You meet the referral requirements. Once the admin configures salary levels, you'll be able to start earning immediately.
+        {!salaryData?.qualificationTimeExpired && salaryData?.levelStatus !== 'DISQUALIFIED' &&
+          salaryData?.totalLevelsAvailable === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              <GlassCard className="bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-400">
+                <div className="flex items-start gap-4">
+                  <div className="text-6xl">🚧</div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-yellow-900 mb-2">
+                      Salary System Configuration In Progress
+                    </h2>
+                    <p className="text-yellow-700 mb-4">
+                      The salary income system is being set up by the administrators. Salary levels are not yet configured.
+                    </p>
+
+                    {salaryData?.meetsReferralRequirement ? (
+                      <div className="bg-green-100 rounded-lg p-5 border border-green-300 mb-4">
+                        <h3 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
+                          <span>✅</span> You've Already Qualified!
+                        </h3>
+                        <p className="text-sm text-green-800">
+                          Great news! You meet the referral requirements. Once the admin configures salary levels, you'll be able to start earning immediately.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-blue-100 rounded-lg p-5 border border-blue-300 mb-4">
+                        <h3 className="font-semibold text-blue-900 mb-3">📋 Your Current Status:</h3>
+                        <ul className="space-y-2 text-sm text-blue-800">
+                          <li>• <strong>User Type:</strong> {salaryData.userType}</li>
+                          <li>• <strong>Required:</strong> {salaryData.requiredReferrals?.free || 0} free referrals OR {salaryData.requiredReferrals?.paid || 0} paid referrals</li>
+                          <li>• <strong>Time Remaining:</strong> {salaryData.qualificationTimeRemainingHours !== undefined ?
+                            (() => {
+                              const hours = salaryData.qualificationTimeRemainingHours;
+                              const days = Math.floor(hours / 24);
+                              const remainingHours = Math.floor(hours % 24);
+                              if (days > 0) return `${days} day${days !== 1 ? 's' : ''} ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`;
+                              return `${Math.round(hours)} hour${Math.round(hours) !== 1 ? 's' : ''}`;
+                            })() : 'N/A'}</li>
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="bg-white rounded-lg p-4 border-2 border-yellow-300">
+                      <p className="text-sm text-gray-700">
+                        💡 <strong>What to do:</strong> Keep referring users to meet the qualification requirements while the admin sets up the salary levels. Once configured, qualified users can start earning salary income.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          )}
+
+        {/* Overall Stats - Only show if not disqualified AND levels are configured */}
+        {!salaryData?.qualificationTimeExpired && salaryData?.levelStatus !== 'DISQUALIFIED' &&
+          salaryData?.totalLevelsAvailable > 0 && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <GlassCard className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-300">
+                    <p className="text-xs text-gray-600 mb-1">Current Level</p>
+                    <p className="text-lg sm:text-xl font-bold text-purple-600">
+                      {salaryData?.currentLevel === 0 ? 'Not Started' : `Level ${salaryData?.currentLevel}`}
+                    </p>
+                  </GlassCard>
+                  <GlassCard className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-300">
+                    <p className="text-xs text-gray-600 mb-1">Total Salary Earned</p>
+                    <p className="text-lg sm:text-xl font-bold text-green-600">
+                      ${(salaryData?.totalSalaryCredited || 0).toFixed(2)}
+                    </p>
+                  </GlassCard>
+                  <GlassCard className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-300">
+                    <p className="text-xs text-gray-600 mb-1">Levels Completed</p>
+                    <p className="text-lg sm:text-xl font-bold text-blue-600">
+                      {salaryData?.levelsCompleted || 0} / {salaryData?.totalLevelsAvailable || 0}
+                    </p>
+                  </GlassCard>
+                  <GlassCard className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-300">
+                    <p className="text-xs text-gray-600 mb-1">User Type</p>
+                    <p className="text-lg sm:text-xl font-bold text-orange-600">
+                      {salaryData?.userType || 'N/A'}
+                    </p>
+                  </GlassCard>
+                </div>
+              </motion.div>
+
+              {/* Current Level Progress */}
+              {salaryData?.currentLevelInfo && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <GlassCard className={`${salaryData.levelStatus === 'TIMELINE_EXPIRED'
+                      ? 'bg-red-50 border-red-300'
+                      : 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-300'
+                    }`}>
+                    <div className="mb-6">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900">
+                            Level {salaryData.currentLevelInfo.level} Progress
+                          </h2>
+                          <p className="text-gray-600 mt-1">
+                            {salaryData.levelStatus === 'TIMELINE_EXPIRED'
+                              ? '⏱️ Timeline expired - No more progress possible for this level'
+                              : `Complete this level to earn $${salaryData.currentLevelInfo.salaryAmount.toFixed(2)} USDT`}
+                          </p>
+                        </div>
+                        {!salaryData.currentLevelInfo.timelineExpired && (
+                          <div className="text-right">
+                            <p className="text-sm text-gray-600">Days Remaining</p>
+                            <p className="text-3xl font-bold text-orange-600">
+                              {salaryData.currentLevelInfo.daysRemaining !== null
+                                ? salaryData.currentLevelInfo.daysRemaining
+                                : '—'}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              of {salaryData.currentLevelInfo.timelineDays} days
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-6">
+                      <div className="flex justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-700">Investment Turnover</span>
+                        <span className="text-sm font-medium text-gray-700">
+                          {salaryData.currentLevelInfo.progressPercentage.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(100, salaryData.currentLevelInfo.progressPercentage)}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between mt-2 text-sm text-gray-600">
+                        <span>${salaryData.currentLevelInfo.turnoverAchieved.toFixed(2)} achieved</span>
+                        <span>${salaryData.currentLevelInfo.turnoverRequired.toFixed(2)} required</span>
+                      </div>
+                    </div>
+
+                    {/* Investment Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Investment Done</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          ${salaryData.currentLevelInfo.turnoverAchieved.toFixed(2)}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          From your referrals & their referrals
+                        </p>
+                      </div>
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Investment Left</p>
+                        <p className="text-2xl font-bold text-orange-600">
+                          ${salaryData.currentLevelInfo.turnoverRemaining.toFixed(2)}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          To complete this level
+                        </p>
+                      </div>
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Level Salary</p>
+                        <p className="text-2xl font-bold text-purple-600">
+                          ${salaryData.currentLevelInfo.salaryAmount.toFixed(2)}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Paid to USDT wallet when complete
+                        </p>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              )}
+
+              {/* Next Level Info */}
+              {salaryData?.nextLevelInfo && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  <GlassCard className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-300">
+                    <h3 className="text-xl font-bold text-blue-900 mb-4">🎯 Next Level: Level {salaryData.nextLevelInfo.level}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Turnover Required</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          ${salaryData.nextLevelInfo.turnoverRequired.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Salary Amount</p>
+                        <p className="text-xl font-bold text-green-600">
+                          ${salaryData.nextLevelInfo.salaryAmount.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-1">Timeline</p>
+                        <p className="text-xl font-bold text-orange-600">
+                          {salaryData.nextLevelInfo.timelineDays} days
+                        </p>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              )}
+
+              {/* Salary Transaction History */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <GlassCard>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">💸 Salary Payment History</h2>
+
+                  {!salaryData?.salaryLogs || salaryData.salaryLogs.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-6xl mb-4">📋</p>
+                      <p className="text-gray-600 text-lg">No salary payments yet</p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        Complete your first level to receive salary payment
                       </p>
                     </div>
                   ) : (
-                    <div className="bg-blue-100 rounded-lg p-5 border border-blue-300 mb-4">
-                      <h3 className="font-semibold text-blue-900 mb-3">📋 Your Current Status:</h3>
-                      <ul className="space-y-2 text-sm text-blue-800">
-                        <li>• <strong>User Type:</strong> {salaryData.userType}</li>
-                        <li>• <strong>Required:</strong> {salaryData.requiredReferrals?.free || 0} free referrals OR {salaryData.requiredReferrals?.paid || 0} paid referrals</li>
-                        <li>• <strong>Time Remaining:</strong> {salaryData.qualificationTimeRemainingHours !== undefined ? 
-                          (() => {
-                            const hours = salaryData.qualificationTimeRemainingHours;
-                            const days = Math.floor(hours / 24);
-                            const remainingHours = Math.floor(hours % 24);
-                            if (days > 0) return `${days} day${days !== 1 ? 's' : ''} ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`;
-                            return `${Math.round(hours)} hour${Math.round(hours) !== 1 ? 's' : ''}`;
-                          })() : 'N/A'}</li>
-                      </ul>
+                    <div className="space-y-3">
+                      {salaryData.salaryLogs.map((log: any) => (
+                        <div key={log.id} className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="font-bold text-gray-900 mb-1">Level {log.level} Completed 🎉</p>
+                              <p className="text-sm text-gray-600">Turnover: ${log.turnoverAchieved.toFixed(2)}</p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {new Date(log.periodFrom).toLocaleDateString()} - {new Date(log.periodTo).toLocaleDateString()}
+                              </p>
+                              {log.remarks && (
+                                <p className="text-xs text-gray-600 mt-1">{log.remarks}</p>
+                              )}
+                            </div>
+                            <div className="text-right">
+                              <p className="text-2xl font-bold text-green-600">
+                                +${log.amount.toFixed(2)}
+                              </p>
+                              <p className="text-xs text-gray-500">USDT</p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {new Date(log.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
+                </GlassCard>
+              </motion.div>
 
-                  <div className="bg-white rounded-lg p-4 border-2 border-yellow-300">
-                    <p className="text-sm text-gray-700">
-                      💡 <strong>What to do:</strong> Keep referring users to meet the qualification requirements while the admin sets up the salary levels. Once configured, qualified users can start earning salary income.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* Overall Stats - Only show if not disqualified AND levels are configured */}
-        {!salaryData?.qualificationTimeExpired && salaryData?.levelStatus !== 'DISQUALIFIED' && 
-         salaryData?.totalLevelsAvailable > 0 && (
-        <>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <GlassCard className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-300">
-              <p className="text-xs text-gray-600 mb-1">Current Level</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-600">
-                {salaryData?.currentLevel === 0 ? 'Not Started' : `Level ${salaryData?.currentLevel}`}
-              </p>
-            </GlassCard>
-            <GlassCard className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-300">
-              <p className="text-xs text-gray-600 mb-1">Total Salary Earned</p>
-              <p className="text-lg sm:text-xl font-bold text-green-600">
-                ${(salaryData?.totalSalaryCredited || 0).toFixed(2)}
-              </p>
-            </GlassCard>
-            <GlassCard className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-300">
-              <p className="text-xs text-gray-600 mb-1">Levels Completed</p>
-              <p className="text-lg sm:text-xl font-bold text-blue-600">
-                {salaryData?.levelsCompleted || 0} / {salaryData?.totalLevelsAvailable || 0}
-              </p>
-            </GlassCard>
-            <GlassCard className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-300">
-              <p className="text-xs text-gray-600 mb-1">User Type</p>
-              <p className="text-lg sm:text-xl font-bold text-orange-600">
-                {salaryData?.userType || 'N/A'}
-              </p>
-            </GlassCard>
-          </div>
-        </motion.div>
-
-        {/* Current Level Progress */}
-        {salaryData?.currentLevelInfo && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <GlassCard className={`${
-              salaryData.levelStatus === 'TIMELINE_EXPIRED' 
-                ? 'bg-red-50 border-red-300' 
-                : 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-300'
-            }`}>
-              <div className="mb-6">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      Level {salaryData.currentLevelInfo.level} Progress
-                    </h2>
-                    <p className="text-gray-600 mt-1">
-                      {salaryData.levelStatus === 'TIMELINE_EXPIRED' 
-                        ? '⏱️ Timeline expired - No more progress possible for this level' 
-                        : `Complete this level to earn $${salaryData.currentLevelInfo.salaryAmount.toFixed(2)} USDT`}
-                    </p>
-                  </div>
-                  {!salaryData.currentLevelInfo.timelineExpired && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600">Days Remaining</p>
-                      <p className="text-3xl font-bold text-orange-600">
-                        {salaryData.currentLevelInfo.daysRemaining !== null 
-                          ? salaryData.currentLevelInfo.daysRemaining 
-                          : '—'}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        of {salaryData.currentLevelInfo.timelineDays} days
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="mb-6">
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Investment Turnover</span>
-                  <span className="text-sm font-medium text-gray-700">
-                    {salaryData.currentLevelInfo.progressPercentage.toFixed(1)}%
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, salaryData.currentLevelInfo.progressPercentage)}%` }}
-                  />
-                </div>
-                <div className="flex justify-between mt-2 text-sm text-gray-600">
-                  <span>${salaryData.currentLevelInfo.turnoverAchieved.toFixed(2)} achieved</span>
-                  <span>${salaryData.currentLevelInfo.turnoverRequired.toFixed(2)} required</span>
-                </div>
-              </div>
-
-              {/* Investment Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Investment Done</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    ${salaryData.currentLevelInfo.turnoverAchieved.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    From your referrals & their referrals
-                  </p>
-                </div>
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Investment Left</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    ${salaryData.currentLevelInfo.turnoverRemaining.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    To complete this level
-                  </p>
-                </div>
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Level Salary</p>
-                  <p className="text-2xl font-bold text-purple-600">
-                    ${salaryData.currentLevelInfo.salaryAmount.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Paid to USDT wallet when complete
-                  </p>
-                </div>
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* Next Level Info */}
-        {salaryData?.nextLevelInfo && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <GlassCard className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-300">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">🎯 Next Level: Level {salaryData.nextLevelInfo.level}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Turnover Required</p>
-                  <p className="text-xl font-bold text-blue-600">
-                    ${salaryData.nextLevelInfo.turnoverRequired.toFixed(2)}
-                  </p>
-                </div>
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Salary Amount</p>
-                  <p className="text-xl font-bold text-green-600">
-                    ${salaryData.nextLevelInfo.salaryAmount.toFixed(2)}
-                  </p>
-                </div>
-                <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-1">Timeline</p>
-                  <p className="text-xl font-bold text-orange-600">
-                    {salaryData.nextLevelInfo.timelineDays} days
-                  </p>
-                </div>
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* Salary Transaction History */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <GlassCard>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">💸 Salary Payment History</h2>
-            
-            {!salaryData?.salaryLogs || salaryData.salaryLogs.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-6xl mb-4">📋</p>
-                <p className="text-gray-600 text-lg">No salary payments yet</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Complete your first level to receive salary payment
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {salaryData.salaryLogs.map((log: any) => (
-                  <div key={log.id} className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <p className="font-bold text-gray-900 mb-1">Level {log.level} Completed 🎉</p>
-                        <p className="text-sm text-gray-600">Turnover: ${log.turnoverAchieved.toFixed(2)}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(log.periodFrom).toLocaleDateString()} - {new Date(log.periodTo).toLocaleDateString()}
-                        </p>
-                        {log.remarks && (
-                          <p className="text-xs text-gray-600 mt-1">{log.remarks}</p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-green-600">
-                          +${log.amount.toFixed(2)}
-                        </p>
-                        <p className="text-xs text-gray-500">USDT</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(log.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </GlassCard>
-        </motion.div>
-
-        {/* How It Works */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <GlassCard className="bg-purple-50 border-purple-300">
-            <h3 className="text-xl font-bold text-purple-900 mb-3">ℹ️ How Salary System Works</h3>
-            <ul className="space-y-2 text-purple-800">
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Progressive Levels:</strong> Complete levels one by one to earn increasing salaries</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Per-Level Turnover:</strong> Each level requires additional investment turnover (not cumulative)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Turnover Source:</strong> Sum of all investments from your direct referrals + their direct referrals since level started</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Timeline:</strong> Each level has its own deadline - achieve turnover within that time or stay at current level</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Payment:</strong> Salary paid once per level to your USDT wallet when you meet the turnover requirement</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span><strong>Requirements:</strong> Need minimum {salaryData?.requiredReferrals?.free || 0} free or {salaryData?.requiredReferrals?.paid || 0} paid referrals to start</span>
-              </li>
-            </ul>
-          </GlassCard>
-        </motion.div>
-        </>
-        )}
+              {/* How It Works */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <GlassCard className="bg-purple-50 border-purple-300">
+                  <h3 className="text-xl font-bold text-purple-900 mb-3">ℹ️ How Salary System Works</h3>
+                  <ul className="space-y-2 text-purple-800">
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Progressive Levels:</strong> Complete levels one by one to earn increasing salaries</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Per-Level Turnover:</strong> Each level requires additional investment turnover (not cumulative)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Turnover Source:</strong> Sum of all investments from your direct referrals + their direct referrals since level started</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Timeline:</strong> Each level has its own deadline - achieve turnover within that time or stay at current level</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Payment:</strong> Salary paid once per level to your USDT wallet when you meet the turnover requirement</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>✓</span>
+                      <span><strong>Requirements:</strong> Need minimum {salaryData?.requiredReferrals?.free || 0} free or {salaryData?.requiredReferrals?.paid || 0} paid referrals to start</span>
+                    </li>
+                  </ul>
+                </GlassCard>
+              </motion.div>
+            </>
+          )}
       </div>
     );
   }
@@ -652,7 +651,7 @@ const ROIIncome = () => {
                   {boostData?.isQualified ? '✅ Qualified for ROI Boost!' : '⏳ Not Yet Qualified'}
                 </h2>
                 <p className="text-gray-700">
-                  {boostData?.isQualified 
+                  {boostData?.isQualified
                     ? 'You are earning boost income from your referrals\' ROI payouts!'
                     : `You need ${boostData?.minReferralsRequired || 0} total referrals to qualify. You currently have ${boostData?.currentReferralCount || 0}.`
                   }
@@ -662,7 +661,7 @@ const ROIIncome = () => {
                 {boostData?.isQualified ? '🎉' : '🎯'}
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
               <div className="bg-white/70 rounded-lg p-4 border border-gray-200">
                 <p className="text-sm text-gray-600 mb-1">Current Referrals</p>
@@ -725,13 +724,13 @@ const ROIIncome = () => {
         >
           <GlassCard>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Boost Income History</h2>
-            
+
             {!boostData?.transactions || boostData.transactions.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-6xl mb-4">📊</p>
                 <p className="text-gray-600 text-lg">No boost income yet</p>
                 <p className="text-sm text-gray-500 mt-2">
-                  {boostData?.isQualified 
+                  {boostData?.isQualified
                     ? 'You\'ll see income here when your referrals receive ROI payouts'
                     : 'Qualify by reaching the minimum referral count'}
                 </p>
@@ -747,18 +746,17 @@ const ROIIncome = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-xl font-bold text-green-600">+${parseFloat(transaction.amount).toFixed(2)} USDT</p>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          transaction.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
-                          transaction.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${transaction.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
+                            transaction.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-gray-100 text-gray-700'
+                          }`}>
                           {transaction.status}
                         </span>
                       </div>
                     </div>
                   </div>
                 ))}
-                
+
                 {/* Pagination */}
                 {boostData?.pagination && boostData.pagination.totalPages > 1 && (
                   <div className="flex justify-center gap-2 mt-6">
@@ -826,14 +824,14 @@ const ROIIncome = () => {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1">
-          {type === 'referral' ? 'Direct Referral Income' : 
-           incomeType === 'ROI' ? 'ROI Earnings' : 
-           incomeType === 'SALARY' ? 'Salary Income' : 
-           'ROI & Income'}
+          {type === 'referral' ? 'Direct Referral Income' :
+            incomeType === 'ROI' ? 'ROI Earnings' :
+              incomeType === 'SALARY' ? 'Salary Income' :
+                'ROI & Income'}
         </h1>
         <p className="text-gray-600 text-xs sm:text-sm">
-          {type === 'referral' ? 'Earnings from your referrals\' plan purchases' : 
-           'Track your earnings from investments and referrals'}
+          {type === 'referral' ? 'Earnings from your referrals\' plan purchases' :
+            'Track your earnings from investments and referrals'}
         </p>
       </motion.div>
 
@@ -904,11 +902,10 @@ const ROIIncome = () => {
                 setIncomeType(t);
                 setPage(1);
               }}
-              className={`px-6 py-3 font-semibold transition-all relative ${
-                incomeType === t
+              className={`px-6 py-3 font-semibold transition-all relative ${incomeType === t
                   ? 'text-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
-              }`}
+                }`}
             >
               {t === 'ROI' ? 'ROI Earnings' : 'Salary Income'}
               {incomeType === t && (
@@ -951,13 +948,12 @@ const ROIIncome = () => {
                             </span>
                             <motion.span
                               whileHover={{ scale: 1.1 }}
-                              className={`text-xs px-3 py-1 rounded-full font-bold ${
-                                tx.status === 'COMPLETED'
+                              className={`text-xs px-3 py-1 rounded-full font-bold ${tx.status === 'COMPLETED'
                                   ? 'bg-success/20 text-success border border-success/30'
                                   : tx.status === 'PENDING'
-                                  ? 'bg-warning/20 text-warning border border-warning/30'
-                                  : 'bg-error/20 text-error border border-error/30'
-                              }`}
+                                    ? 'bg-warning/20 text-warning border border-warning/30'
+                                    : 'bg-error/20 text-error border border-error/30'
+                                }`}
                             >
                               {tx.status}
                             </motion.span>
@@ -1068,7 +1064,7 @@ const ROIIncome = () => {
           >
             <GlassCard>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Direct Referral Income History</h2>
-              
+
               {!referralData?.transactions || referralData.transactions.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-6xl mb-4">🎁</p>
@@ -1084,48 +1080,45 @@ const ROIIncome = () => {
                     // Format: "Paid/Free direct referral income from Name's Plan plan purchase ($X USDT)"
                     const desc = transaction.description || '';
                     const isPaid = desc.includes('Paid');
-                    const isFree = desc.includes('Free');
-                    
+
                     // Check if this is the old format (no detailed info)
                     const hasDetails = desc.includes("'s") && desc.includes("plan purchase");
-                    
+
                     let referralName = 'Not Available';
                     let planName = 'Not Available';
                     let investmentAmount = '0';
-                    
+
                     if (hasDetails) {
                       // Extract referral name (text between "from " and "'s")
                       const nameMatch = desc.match(/from (.+?)'s/);
                       referralName = nameMatch ? nameMatch[1] : 'Not Available';
-                      
+
                       // Extract plan name (text between "'s " and " plan purchase")
                       const planMatch = desc.match(/'s (.+?) plan purchase/);
                       planName = planMatch ? planMatch[1] : 'Not Available';
-                      
+
                       // Extract amount (text between "($" and " USDT)")
                       const amountMatch = desc.match(/\(\$(.+?) USDT\)/);
                       investmentAmount = amountMatch ? amountMatch[1] : '0';
                     }
-                    
+
                     return (
                       <div key={transaction.id} className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border-2 border-purple-200 hover:border-purple-400 transition-all">
                         <div className="flex justify-between items-start mb-3">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                                isPaid ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                              }`}>
+                              <span className={`text-xs font-bold px-2 py-1 rounded-full ${isPaid ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                                }`}>
                                 {isPaid ? '💎 PAID REFERRAL' : '🆓 FREE REFERRAL'}
                               </span>
-                              <span className={`text-xs px-2 py-1 rounded-full ${
-                                transaction.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
-                                transaction.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-gray-100 text-gray-700'
-                              }`}>
+                              <span className={`text-xs px-2 py-1 rounded-full ${transaction.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
+                                  transaction.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-gray-100 text-gray-700'
+                                }`}>
                                 {transaction.status}
                               </span>
                             </div>
-                            
+
                             {hasDetails ? (
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2">
@@ -1167,7 +1160,7 @@ const ROIIncome = () => {
                       </div>
                     );
                   })}
-                  
+
                   {/* Pagination */}
                   {referralData?.pagination && referralData.pagination.totalPages > 1 && (
                     <div className="flex justify-center gap-2 mt-6">

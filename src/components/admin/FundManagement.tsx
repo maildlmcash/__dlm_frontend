@@ -36,22 +36,21 @@ interface PoolTransaction {
 const FundManagement = () => {
   const [stats, setStats] = useState<FundStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState<'all' | 'today' | 'week' | 'month'>('all');
-  
+
   // Withdraw modal state
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawAddress, setWithdrawAddress] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawRemarks, setWithdrawRemarks] = useState('');
   const [withdrawing, setWithdrawing] = useState(false);
-  
+
   // Deposit modal state
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositAmount, setDepositAmount] = useState('');
   const [depositTxHash, setDepositTxHash] = useState('');
   const [depositRemarks, setDepositRemarks] = useState('');
   const [depositing, setDepositing] = useState(false);
-  
+
   // Pool transactions
   const [poolTransactions, setPoolTransactions] = useState<PoolTransaction[]>([]);
   const [loadingTransactions, setLoadingTransactions] = useState(false);
@@ -59,12 +58,12 @@ const FundManagement = () => {
   useEffect(() => {
     loadFundStats();
     loadPoolTransactions();
-  }, [dateRange]);
+  }, []);
 
   const loadFundStats = async () => {
     setLoading(true);
     try {
-      const response = await adminApi.getFeeStats(dateRange);
+      const response = await adminApi.getFeeStats('all');
       if (response.success && response.data) {
         setStats(response.data as FundStats);
       } else {
@@ -105,7 +104,7 @@ const FundManagement = () => {
         amount: withdrawAmount,
         remarks: withdrawRemarks,
       });
-      
+
       if (response.success) {
         showToast.success('Withdrawal successful!');
         setShowWithdrawModal(false);
@@ -137,7 +136,7 @@ const FundManagement = () => {
         txHash: depositTxHash,
         remarks: depositRemarks,
       });
-      
+
       if (response.success) {
         showToast.success('Deposit recorded successfully!');
         setShowDepositModal(false);
@@ -214,10 +213,10 @@ const FundManagement = () => {
         </div>
       </motion.div>
 
-      
+
 
       {/* Total Earnings Card */}
-      
+
 
       {/* 5 Main Statistics */}
       <motion.div
@@ -331,7 +330,7 @@ const FundManagement = () => {
                   <span className="text-sm font-medium text-gray-700">USDT Deposits (Blockchain)</span>
                   <span className="font-bold text-indigo-600">{formatCurrency(stats?.depositUSDTFees || 0, 'USDT')}</span>
                 </motion.div>
-                
+
               </div>
             </div>
             <div>
@@ -409,11 +408,10 @@ const FundManagement = () => {
                   {poolTransactions.map((tx) => (
                     <tr key={tx.id}>
                       <td className="px-4 py-3">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          tx.type === 'WITHDRAW' 
-                            ? 'bg-red-100 text-red-800' 
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${tx.type === 'WITHDRAW'
+                            ? 'bg-red-100 text-red-800'
                             : 'bg-green-100 text-green-800'
-                        }`}>
+                          }`}>
                           {tx.type}
                         </span>
                       </td>
@@ -423,7 +421,7 @@ const FundManagement = () => {
                           <span className="font-mono text-xs">{tx.address.slice(0, 10)}...{tx.address.slice(-8)}</span>
                         )}
                         {tx.type === 'DEPOSIT' && tx.txHash && (
-                          <a 
+                          <a
                             href={`https://sepolia.etherscan.io/tx/${tx.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -434,13 +432,12 @@ const FundManagement = () => {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          tx.status === 'COMPLETED' 
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${tx.status === 'COMPLETED'
                             ? 'bg-green-100 text-green-800'
                             : tx.status === 'PENDING'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
                           {tx.status}
                         </span>
                       </td>
@@ -474,7 +471,7 @@ const FundManagement = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Withdraw Funds from Pool</h2>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -549,7 +546,7 @@ const FundManagement = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Add Funds to Pool</h2>
-              
+
               <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-800">
                   💡 <strong>Instructions:</strong> Transfer USDT to the pool contract using your wallet, then record the transaction details here.
@@ -612,7 +609,7 @@ const FundManagement = () => {
         )}
       </AnimatePresence>
 
-      
+
     </div>
   );
 };

@@ -124,7 +124,7 @@ const ROISalary = () => {
           salaryIncomeAmount: level.salaryIncomeAmount || 0,
           salaryPaymentTimes: level.salaryPaymentTimes || 1,
         }));
-        
+
         setSalarySettings({
           qualificationTimeLimitHours: data.qualificationTimeLimitHours || 72,
           freeUser: {
@@ -162,63 +162,16 @@ const ROISalary = () => {
     }
   };
 
-  const addLevel = (userType: 'freeUser' | 'paidUser') => {
-    setSalarySettings({
-      ...salarySettings,
-      [userType]: {
-        ...salarySettings[userType],
-        levels: [
-          ...salarySettings[userType].levels,
-          {
-            days: 30,
-            turnoverAmount: 0,
-            salaryIncomeAmount: 0,
-            salaryPaymentTimes: 1,
-          },
-        ],
-      },
-    });
-  };
-
-  const removeLevel = (userType: 'freeUser' | 'paidUser', index: number) => {
-    setSalarySettings({
-      ...salarySettings,
-      [userType]: {
-        ...salarySettings[userType],
-        levels: salarySettings[userType].levels.filter((_, i) => i !== index),
-      },
-    });
-  };
-
-  const updateLevel = (
-    userType: 'freeUser' | 'paidUser',
-    index: number,
-    field: keyof SalaryLevel,
-    value: number
-  ) => {
-    const updatedLevels = [...salarySettings[userType].levels];
-    updatedLevels[index] = {
-      ...updatedLevels[index],
-      [field]: value,
-    };
-    setSalarySettings({
-      ...salarySettings,
-      [userType]: {
-        ...salarySettings[userType],
-        levels: updatedLevels,
-      },
-    });
-  };
 
   const loadROILogs = async () => {
     setLoading(true);
     try {
       // This would need to be implemented in backend
       // For now, using transactions filtered by ROI_CREDIT type
-      const response = await adminApi.getAllTransactions({ 
-        page, 
-        limit: 20, 
-        type: 'ROI_CREDIT' 
+      const response = await adminApi.getAllTransactions({
+        page,
+        limit: 20,
+        type: 'ROI_CREDIT'
       });
       if (response.success && response.data) {
         const data = response.data as any;
@@ -236,10 +189,10 @@ const ROISalary = () => {
     try {
       // This would need to be implemented in backend
       // For now, using transactions filtered by SALARY_CREDIT type
-      const response = await adminApi.getAllTransactions({ 
-        page, 
-        limit: 20, 
-        type: 'SALARY_CREDIT' 
+      const response = await adminApi.getAllTransactions({
+        page,
+        limit: 20,
+        type: 'SALARY_CREDIT'
       });
       if (response.success && response.data) {
         const data = response.data as any;
@@ -265,41 +218,37 @@ const ROISalary = () => {
           <div className="flex">
             <button
               onClick={() => setActiveTab('boost')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${
-                activeTab === 'boost'
+              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'boost'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               🚀 ROI Boost
             </button>
             <button
               onClick={() => setActiveTab('roi')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${
-                activeTab === 'roi'
+              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'roi'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               ROI Logs
             </button>
             <button
               onClick={() => setActiveTab('salary')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${
-                activeTab === 'salary'
+              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'salary'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               Salary Logs
             </button>
             <button
               onClick={() => setActiveTab('settings')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${
-                activeTab === 'settings'
+              className={`px-6 py-3 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'settings'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               Settings
             </button>
@@ -342,9 +291,8 @@ const ROISalary = () => {
                           <td className="px-4 py-2 text-sm">{log.userId.substring(0, 8)}...</td>
                           <td className="px-4 py-2 text-sm font-medium">₹{parseFloat(log.amount).toLocaleString()}</td>
                           <td className="px-4 py-2 text-sm">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              log.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                            }`}>
+                            <span className={`px-2 py-1 rounded-full text-xs ${log.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                              }`}>
                               {log.status}
                             </span>
                           </td>
@@ -420,7 +368,7 @@ const ROISalary = () => {
                 <p className="text-sm text-gray-600 mb-6">
                   Configure qualification rules for salary income. Users must meet referral count requirement (free OR paid) and qualify for at least one level based on turnover.
                 </p>
-                
+
                 {loadingSettings ? (
                   <div className="p-8 text-center text-gray-500">Loading settings...</div>
                 ) : (
@@ -429,7 +377,7 @@ const ROISalary = () => {
                     <div className="bg-yellow-50 p-6 rounded-lg border-2 border-yellow-300">
                       <h3 className="text-xl font-semibold mb-3 text-yellow-800">⏰ Qualification Time Limit</h3>
                       <p className="text-sm text-gray-700 mb-4">
-                        Set the time window (in hours) from user signup date within which users must meet the qualification requirements. 
+                        Set the time window (in hours) from user signup date within which users must meet the qualification requirements.
                         After this time expires, users will be <strong>permanently disqualified</strong> from earning salary, even if they meet requirements later.
                       </p>
                       <div className="max-w-xs">
@@ -458,7 +406,7 @@ const ROISalary = () => {
                       <p className="text-sm text-gray-700 mb-4">
                         If user is free (not verified), they need to have free referral count OR paid referral count more than set values.
                       </p>
-                      
+
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -498,7 +446,7 @@ const ROISalary = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="bg-green-100 border border-green-300 rounded-lg p-4">
                           <p className="text-sm text-green-800">
                             <strong>🔗 Note:</strong> Salary levels are managed in the <strong>Referrals → Level Config</strong> page.
@@ -513,7 +461,7 @@ const ROISalary = () => {
                       <p className="text-sm text-gray-700 mb-4">
                         If user is paid (verified), they need to have free referral count OR paid referral count more than set values.
                       </p>
-                      
+
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -553,7 +501,7 @@ const ROISalary = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="bg-blue-100 border border-blue-300 rounded-lg p-4">
                           <p className="text-sm text-blue-800">
                             <strong>🔗 Note:</strong> Salary levels are managed in the <strong>Referrals → Level Config</strong> page.

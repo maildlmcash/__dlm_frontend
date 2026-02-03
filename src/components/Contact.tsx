@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Header from './landing/Header';
 import Footer from './landing/Footer';
 
@@ -28,7 +27,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      
+
       <section className="w-full min-h-screen flex flex-col justify-start px-4 sm:px-6 lg:px-8 pt-32 sm:pt-36 pb-16 sm:pb-20 relative z-10 bg-white">
         <div className="max-w-7xl mx-auto w-full">
           {/* Header Section */}
@@ -39,17 +38,17 @@ const Contact = () => {
             className="mb-12 sm:mb-16"
           >
             <div className="flex items-start gap-3 mb-6 sm:mb-8" style={{ marginTop: '-8px' }}>
-              <svg 
-                width="28" 
-                height="28" 
-                viewBox="0 0 63 63" 
-                fill="none" 
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 63 63"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M10 31.5C15 25 20 38 25 31.5C30 25 35 38 40 31.5C45 25 50 38 55 31.5" 
-                  stroke="#d6b3ff" 
-                  strokeWidth="3" 
+                <path
+                  d="M10 31.5C15 25 20 38 25 31.5C30 25 35 38 40 31.5C45 25 50 38 55 31.5"
+                  stroke="#d6b3ff"
+                  strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -59,7 +58,7 @@ const Contact = () => {
               </span>
             </div>
 
-            <h1 
+            <h1
               style={{
                 fontFamily: 'Inter, "Inter Placeholder", sans-serif',
                 fontSize: 'clamp(64px, 12vw, 179px)',
@@ -72,7 +71,7 @@ const Contact = () => {
               Contact
             </h1>
 
-            <p 
+            <p
               className="mt-6"
               style={{
                 fontFamily: 'Inter, "Inter Placeholder", sans-serif',
@@ -91,7 +90,7 @@ const Contact = () => {
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
-              <a 
+              <a
                 href="mailto:maildlm.cash@gmail.com"
                 style={{
                   fontFamily: 'Inter, "Inter Placeholder", sans-serif',
@@ -116,8 +115,8 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
               <div>
-                <label 
-                  htmlFor="name" 
+                <label
+                  htmlFor="name"
                   className="block mb-2"
                   style={{
                     fontFamily: 'Inter, "Inter Placeholder", sans-serif',
@@ -146,8 +145,8 @@ const Contact = () => {
 
               {/* Email Field */}
               <div>
-                <label 
-                  htmlFor="email" 
+                <label
+                  htmlFor="email"
                   className="block mb-2"
                   style={{
                     fontFamily: 'Inter, "Inter Placeholder", sans-serif',
@@ -176,8 +175,8 @@ const Contact = () => {
 
               {/* Subject Field */}
               <div>
-                <label 
-                  htmlFor="subject" 
+                <label
+                  htmlFor="subject"
                   className="block mb-2"
                   style={{
                     fontFamily: 'Inter, "Inter Placeholder", sans-serif',
@@ -206,8 +205,8 @@ const Contact = () => {
 
               {/* Message Field */}
               <div>
-                <label 
-                  htmlFor="message" 
+                <label
+                  htmlFor="message"
                   className="block mb-2"
                   style={{
                     fontFamily: 'Inter, "Inter Placeholder", sans-serif',

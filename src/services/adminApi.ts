@@ -32,12 +32,12 @@ class AdminApiService {
   ): Promise<ApiResponse<T>> {
     try {
       const headers: Record<string, string> = {};
-      
+
       // Only set Content-Type for JSON, not for FormData
       if (!(options.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
       }
-      
+
       // Merge any additional headers
       if (options.headers) {
         Object.assign(headers, options.headers);
@@ -66,7 +66,7 @@ class AdminApiService {
       // Otherwise just return the data
       return {
         success: true,
-        data: data.pagination ? { data: data.data, pagination: data.pagination } : data.data,
+        data: (data.pagination ? { data: data.data, pagination: data.pagination } : data.data) as any,
         message: data.message,
       };
     } catch (error) {
@@ -115,7 +115,7 @@ class AdminApiService {
     if (params?.status) queryParams.append('status', params.status);
     if (params?.role) queryParams.append('role', params.role);
     if (params?.search) queryParams.append('search', params.search);
-    
+
     return this.request(`/admin/users?${queryParams.toString()}`);
   }
 
@@ -142,7 +142,7 @@ class AdminApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     return this.request(`/admin/kyc/pending?${queryParams.toString()}`);
   }
 
@@ -165,7 +165,7 @@ class AdminApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     return this.request(`/admin/deposits/pending?${queryParams.toString()}`);
   }
 
@@ -186,7 +186,7 @@ class AdminApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     return this.request(`/admin/withdrawals/pending?${queryParams.toString()}`);
   }
 
@@ -213,7 +213,7 @@ class AdminApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.isActive !== undefined) queryParams.append('isActive', params.isActive.toString());
-    
+
     return this.request(`/admin/plans?${queryParams.toString()}`);
   }
 
@@ -270,7 +270,7 @@ class AdminApiService {
     if (params?.status) queryParams.append('status', params.status);
     if (params?.userId) queryParams.append('userId', params.userId);
     if (params?.planId) queryParams.append('planId', params.planId);
-    
+
     return this.request(`/admin/investments?${queryParams.toString()}`);
   }
 
@@ -284,7 +284,7 @@ class AdminApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.isPublished !== undefined) queryParams.append('isPublished', params.isPublished.toString());
-    
+
     return this.request(`/blog/posts?${queryParams.toString()}`);
   }
 
@@ -347,7 +347,7 @@ class AdminApiService {
     if (params?.status) queryParams.append('status', params.status);
     if (params?.userId) queryParams.append('userId', params.userId);
     if (params?.currency) queryParams.append('currency', params.currency);
-    
+
     return this.request(`/admin/deposits?${queryParams.toString()}`);
   }
 
@@ -359,16 +359,16 @@ class AdminApiService {
     if (params?.status) queryParams.append('status', params.status);
     if (params?.userId) queryParams.append('userId', params.userId);
     if (params?.currency) queryParams.append('currency', params.currency);
-    
+
     return this.request(`/admin/withdrawals?${queryParams.toString()}`);
   }
 
   // Transactions
-  async getAllTransactions(params?: { 
-    page?: number; 
-    limit?: number; 
-    type?: string; 
-    status?: string; 
+  async getAllTransactions(params?: {
+    page?: number;
+    limit?: number;
+    type?: string;
+    status?: string;
     userId?: string;
     dateFrom?: string;
     dateTo?: string;
@@ -383,7 +383,7 @@ class AdminApiService {
     if (params?.dateFrom) queryParams.append('dateFrom', params.dateFrom);
     if (params?.dateTo) queryParams.append('dateTo', params.dateTo);
     if (params?.search) queryParams.append('search', params.search);
-    
+
     return this.request(`/admin/transactions?${queryParams.toString()}`);
   }
 
@@ -394,7 +394,7 @@ class AdminApiService {
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.userId) queryParams.append('userId', params.userId);
     if (params?.type) queryParams.append('type', params.type);
-    
+
     return this.request(`/user/wallets?${queryParams.toString()}`);
   }
 
@@ -405,7 +405,7 @@ class AdminApiService {
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.status) queryParams.append('status', params.status);
     if (params?.userId) queryParams.append('userId', params.userId);
-    
+
     return this.request(`/support/all?${queryParams.toString()}`);
   }
 
@@ -422,7 +422,7 @@ class AdminApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.userId) queryParams.append('userId', params.userId);
-    
+
     return this.request(`/notifications?${queryParams.toString()}`);
   }
 
@@ -509,7 +509,7 @@ class AdminApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.status) queryParams.append('status', params.status);
-    
+
     return this.request(`/admin/breakdown/refunds?${queryParams.toString()}`);
   }
 
@@ -746,7 +746,7 @@ class AdminApiService {
     return this.request('/admin/platform-fee/settings');
   }
 
-  async savePlatformFeeSettings(data: { 
+  async savePlatformFeeSettings(data: {
     minDepositUSDT: number;
     minWithdrawalUSDT: number;
     depositFeePercent: number;
@@ -780,7 +780,7 @@ class AdminApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     return this.request(`/admin/currency/logs?${queryParams.toString()}`);
   }
 

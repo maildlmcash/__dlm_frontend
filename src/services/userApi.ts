@@ -26,11 +26,11 @@ class UserApiService {
   ): Promise<ApiResponse<T>> {
     try {
       const headers: Record<string, string> = {};
-      
+
       if (!(options.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
       }
-      
+
       if (options.headers) {
         Object.assign(headers, options.headers);
       }
@@ -88,7 +88,7 @@ class UserApiService {
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.type) queryParams.append('type', params.type);
     if (params?.status) queryParams.append('status', params.status);
-    
+
     const query = queryParams.toString();
     return this.request(`/user/transactions${query ? `?${query}` : ''}`);
   }
@@ -111,7 +111,7 @@ class UserApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.status) queryParams.append('status', params.status);
-    
+
     const query = queryParams.toString();
     return this.request(`/user/investments${query ? `?${query}` : ''}`);
   }
@@ -136,9 +136,9 @@ class UserApiService {
     });
   }
 
-  async createInvestment(data: { 
-    planId: string; 
-    amount: number; 
+  async createInvestment(data: {
+    planId: string;
+    amount: number;
     purchaseMethod: 'ADMIN_REQUEST' | 'DIRECT_WALLET_INR' | 'DIRECT_WALLET_USDT' | 'AUTH_KEY';
     authKeyCode?: string;
     walletType?: 'INR' | 'USDT';
@@ -205,7 +205,7 @@ class UserApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/referrals/income${query ? `?${query}` : ''}`);
   }
@@ -216,7 +216,7 @@ class UserApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.type) queryParams.append('type', params.type);
-    
+
     const query = queryParams.toString();
     return this.request(`/user/roi-income${query ? `?${query}` : ''}`);
   }
@@ -231,7 +231,7 @@ class UserApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/roi-boost${query ? `?${query}` : ''}`);
   }
@@ -240,7 +240,7 @@ class UserApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/direct-referral-income${query ? `?${query}` : ''}`);
   }
@@ -249,7 +249,7 @@ class UserApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/salary-income${query ? `?${query}` : ''}`);
   }
@@ -263,7 +263,7 @@ class UserApiService {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/deposit-wallet/transactions${query ? `?${query}` : ''}`);
   }
@@ -295,13 +295,9 @@ class UserApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.isRead !== undefined) queryParams.append('isRead', params.isRead.toString());
-    
+
     const query = queryParams.toString();
     return this.request(`/user/notifications${query ? `?${query}` : ''}`);
-  }
-  // Currency
-  async getCurrencyRate() {
-    return this.request('/user/currency/rate');
   }
   async markNotificationAsRead(id: string) {
     return this.request(`/user/notifications/${id}/read`, {
@@ -324,12 +320,6 @@ class UserApiService {
 
   async getPlatformFeeSettings() {
     return this.request('/deposits/platform-fee-settings');
-  }
-
-  async checkDeposits() {
-    return this.request('/user/deposit-wallet/check', {
-      method: 'POST',
-    });
   }
 
   async createDeposit(formData: FormData) {
@@ -374,17 +364,17 @@ class UserApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.status) queryParams.append('status', params.status);
-    
+
     const query = queryParams.toString();
     return this.request(`/deposits${query ? `?${query}` : ''}`);
   }
 
   // Withdrawals
-  async createWithdrawal(data: { 
-    amount: number; 
-    currency: string; 
-    method: string; 
-    destination?: string; 
+  async createWithdrawal(data: {
+    amount: number;
+    currency: string;
+    method: string;
+    destination?: string;
     walletType?: string;
     withdrawalAddress?: string;
     bankDetails?: any;
@@ -401,7 +391,7 @@ class UserApiService {
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.status) queryParams.append('status', params.status);
-    
+
     const query = queryParams.toString();
     return this.request(`/withdrawals${query ? `?${query}` : ''}`);
   }
@@ -446,18 +436,6 @@ class UserApiService {
 
   async getWithdrawEnabledNetworks() {
     return this.request('/user/networks/withdraw');
-  }
-
-  // Pending Deposit with network
-  async createPendingDeposit(data: {
-    txHash: string;
-    amount: number;
-    network?: string;
-  }) {
-    return this.request('/wallet/pending-deposit', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
   }
 
   // Redeem funds from special wallets to USDT wallet

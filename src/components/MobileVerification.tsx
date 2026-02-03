@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { apiService } from '../services/api';
 
 const MobileVerification = () => {
@@ -90,7 +89,7 @@ const MobileVerification = () => {
         // Store token in localStorage
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
+
         // Navigate to dashboard or home
         navigate('/dashboard', { replace: true });
       } else {
@@ -127,8 +126,8 @@ const MobileVerification = () => {
   };
 
   const phoneNumber = phone || mobile;
-  const displayMobile = phoneNumber?.startsWith('+') 
-    ? phoneNumber 
+  const displayMobile = phoneNumber?.startsWith('+')
+    ? phoneNumber
     : (countryCode ? `+${countryCode} ${phoneNumber}` : phoneNumber || 'your phone');
 
   return (
@@ -200,8 +199,8 @@ const MobileVerification = () => {
               {resendLoading
                 ? 'Sending...'
                 : countdown > 0
-                ? `Resend code in ${countdown}s`
-                : 'Resend code'}
+                  ? `Resend code in ${countdown}s`
+                  : 'Resend code'}
             </button>
           </div>
 

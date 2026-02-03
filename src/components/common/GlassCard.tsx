@@ -7,7 +7,7 @@ interface GlassCardProps {
   blur?: boolean;
 }
 
-const GlassCard = ({ children, className = '', blur = true }: GlassCardProps) => {
+const GlassCard = ({ children, className = '' }: GlassCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}

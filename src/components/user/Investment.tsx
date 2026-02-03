@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { userApi } from '../../services/userApi';
 import { showToast } from '../../utils/toast';
-import { confirm } from '../../utils/confirm';
 import LoadingSpinner from '../common/LoadingSpinner';
 import AnimatedButton from '../common/AnimatedButton';
 import AnimatedInput from '../common/AnimatedInput';
@@ -76,7 +75,7 @@ const Investment = () => {
   // Use ref to track latest investments for the interval callback
   const investmentsRef = useRef<Investment[]>([]);
   const updateRealTimeROIRef = useRef<(() => Promise<void>) | null>(null);
-  
+
   useEffect(() => {
     investmentsRef.current = investments;
   }, [investments]);
@@ -94,7 +93,7 @@ const Investment = () => {
       // Get current investments from ref to always use latest
       const currentInvestments = investmentsRef.current;
       const activeInvestments = currentInvestments.filter(inv => inv.status === 'ACTIVE');
-      
+
       if (activeInvestments.length === 0) return;
 
       // Update each active investment
@@ -103,9 +102,9 @@ const Investment = () => {
           const response = await userApi.getInvestmentRealTimeROI(investment.id);
           if (response.success && response.data && isMounted) {
             const data = response.data as any;
-            setInvestments(prev => 
-              prev.map(inv => 
-                inv.id === investment.id 
+            setInvestments(prev =>
+              prev.map(inv =>
+                inv.id === investment.id
                   ? { ...inv, realTimeROI: data.realTimeROI }
                   : inv
               )
@@ -215,20 +214,20 @@ const Investment = () => {
         userApi.getWallets(),
         userApi.getCurrencyRate(),
       ]);
-      
+
       if (walletsResponse.success && walletsResponse.data) {
         const wallets = walletsResponse.data as any;
         const walletsArray = Array.isArray(wallets) ? wallets : wallets.data || [];
-        
+
         const inrWallet = walletsArray.find((w: any) => w.type === 'INR');
         const usdtWallet = walletsArray.find((w: any) => w.type === 'USDT');
-        
+
         setWalletBalances({
           inr: inrWallet?.balance || '0',
           usdt: usdtWallet?.balance || '0',
         });
       }
-      
+
       // Fetch currency rate
       if (rateResponse.success && rateResponse.data) {
         const rateData = rateResponse.data as any;
@@ -265,8 +264,8 @@ const Investment = () => {
         const message = purchaseMethod === 'ADMIN_REQUEST'
           ? 'Investment request submitted successfully! Waiting for admin approval.'
           : purchaseMethod === 'AUTH_KEY'
-          ? 'Investment activated successfully! Your plan is now active and ROI payouts will begin as scheduled.'
-          : 'Investment created successfully!';
+            ? 'Investment activated successfully! Your plan is now active and ROI payouts will begin as scheduled.'
+            : 'Investment created successfully!';
         showToast.success(message);
         setShowPurchaseModal(false);
         setSelectedPlan(null);
@@ -322,7 +321,7 @@ const Investment = () => {
   };
 
   const hasBreakdownRequest = (investment: Investment) => {
-    return investment.refunds?.some(refund => 
+    return investment.refunds?.some(refund =>
       refund.status === 'PENDING'
     ) || false;
   };
@@ -331,14 +330,14 @@ const Investment = () => {
     if (!investment.startDate) {
       return false; // Can't request if no start date
     }
-    
+
     const startDate = new Date(investment.startDate);
     const today = new Date();
     const daysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     // Default to 30 days if refundTimelineDays is not set (for older investments)
     const timelineDays = investment.refundTimelineDays || 30;
-    
+
     // Window is open if we're within the timeline
     return daysSinceStart <= timelineDays;
   };
@@ -347,14 +346,14 @@ const Investment = () => {
     if (!investment.startDate) {
       return 0;
     }
-    
+
     const startDate = new Date(investment.startDate);
     const today = new Date();
     const daysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     // Default to 30 days if refundTimelineDays is not set (for older investments)
     const timelineDays = investment.refundTimelineDays || 30;
-    
+
     return Math.max(0, timelineDays - daysSinceStart);
   };
 
@@ -516,10 +515,10 @@ const Investment = () => {
                     </motion.button>
                   </div>
                 </div>
-                
+
                 {/* Modal Body */}
                 <div className="p-6 space-y-5">
-                    <div className="space-y-4 mb-6">
+                  <div className="space-y-4 mb-6">
                     <div className="p-4 bg-primary-500/10 rounded-xl border border-primary-500/20">
                       <p className="text-xs text-gray-600 mb-1 font-medium">Plan</p>
                       <p className="text-gray-900 font-bold text-lg">{selectedPlan.name}</p>
@@ -543,11 +542,11 @@ const Investment = () => {
                       <div className="space-y-3">
                         {[
                           { value: 'ADMIN_REQUEST', label: 'Admin Request', desc: 'Request admin to purchase this plan', icon: '👤' },
-                          { 
-                            value: 'DIRECT_WALLET_INR', 
-                            label: 'Direct Payment (INR)', 
-                            desc: `Balance: ${formatCurrency(walletBalances.inr, 'INR')} (~$${(parseFloat(walletBalances.inr) / currencyRate).toFixed(2)} USDT)`, 
-                            icon: '💵' 
+                          {
+                            value: 'DIRECT_WALLET_INR',
+                            label: 'Direct Payment (INR)',
+                            desc: `Balance: ${formatCurrency(walletBalances.inr, 'INR')} (~$${(parseFloat(walletBalances.inr) / currencyRate).toFixed(2)} USDT)`,
+                            icon: '💵'
                           },
                           { value: 'DIRECT_WALLET_USDT', label: 'Direct Payment (USDT)', desc: `Balance: ${formatCurrency(walletBalances.usdt, 'USDT')}`, icon: '₮' },
                           { value: 'AUTH_KEY', label: 'Authentication Key', desc: 'Use Authentication Key code to purchase', icon: '🔑' },
@@ -555,11 +554,10 @@ const Investment = () => {
                           <motion.label
                             key={method.value}
                             whileHover={{ scale: 1.02, x: 4 }}
-                            className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2 ${
-                              purchaseMethod === method.value
+                            className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2 ${purchaseMethod === method.value
                                 ? 'bg-blue-50 border-blue-500'
                                 : 'bg-gray-50 border-gray-200 hover:border-blue-300'
-                            }`}
+                              }`}
                           >
                             <input
                               type="radio"
@@ -656,7 +654,7 @@ const Investment = () => {
           </p>
         </div>
         {type === 'plans' && (
-          <AnimatedButton 
+          <AnimatedButton
             onClick={() => navigate('/investment/browse')}
             variant="primary"
             size="lg"
@@ -682,11 +680,10 @@ const Investment = () => {
               transition={{ delay: 0.2 + index * 0.1 }}
               whileHover={{ y: -2 }}
               onClick={() => setFilter(f)}
-              className={`px-6 py-3 font-semibold transition-all relative ${
-                filter === f
+              className={`px-6 py-3 font-semibold transition-all relative ${filter === f
                   ? 'text-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
-              }`}
+                }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
               {filter === f && (
@@ -728,15 +725,14 @@ const Investment = () => {
                   </div>
                   <motion.span
                     whileHover={{ scale: 1.1 }}
-                    className={`px-4 py-2 rounded-full text-xs font-bold ${
-                      investment.status === 'ACTIVE'
+                    className={`px-4 py-2 rounded-full text-xs font-bold ${investment.status === 'ACTIVE'
                         ? 'bg-success/20 text-success border border-success/30'
                         : investment.status === 'COMPLETED'
-                        ? 'bg-info/20 text-info border border-info/30'
-                        : investment.status === 'REJECTED'
-                        ? 'bg-red-100 text-red-600 border border-red-300'
-                        : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                    }`}
+                          ? 'bg-info/20 text-info border border-info/30'
+                          : investment.status === 'REJECTED'
+                            ? 'bg-red-100 text-red-600 border border-red-300'
+                            : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                      }`}
                   >
                     {investment.status}
                   </motion.span>
@@ -804,7 +800,7 @@ const Investment = () => {
                           ⚠️ Request Breakdown
                         </AnimatedButton>
                         <p className="text-xs text-gray-500 mt-2">
-                          {getDaysRemainingForBreakdown(investment) > 0 
+                          {getDaysRemainingForBreakdown(investment) > 0
                             ? `You have ${getDaysRemainingForBreakdown(investment)} day(s) left to request breakdown`
                             : 'Last day to request breakdown'
                           }
@@ -902,7 +898,7 @@ const Investment = () => {
                   </motion.button>
                 </div>
               </div>
-              
+
               {/* Modal Body */}
               <div className="p-6 space-y-5">
                 <motion.div
@@ -939,12 +935,12 @@ const Investment = () => {
                     const investmentAmount = parseFloat(selectedInvestmentForBreakdown.amount || '0');
                     const totalROICredited = parseFloat(selectedInvestmentForBreakdown.realTimeROI || selectedInvestmentForBreakdown.roiEarned || '0');
                     const deductionPercentage = 20; // Default, should match backend setting
-                    
+
                     // New formula: [Total invested * (100 - Deduction%)] - [Total ROI Credited * 50%]
                     const investmentAfterDeduction = investmentAmount * (100 - deductionPercentage) / 100;
                     const roiPenalty = totalROICredited * 0.5;
                     const breakdownAmount = investmentAfterDeduction - roiPenalty;
-                    
+
                     return (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -956,14 +952,14 @@ const Investment = () => {
                           {formatCurrency(Math.max(0, breakdownAmount).toFixed(2))}
                         </p>
                         <p className="text-xs text-gray-500 mt-2">
-                          Calculation: ${investmentAmount.toFixed(2)} × {100-deductionPercentage}% = ${investmentAfterDeduction.toFixed(2)} - ROI Penalty ${roiPenalty.toFixed(2)} (50% of ${totalROICredited.toFixed(2)})
+                          Calculation: ${investmentAmount.toFixed(2)} × {100 - deductionPercentage}% = ${investmentAfterDeduction.toFixed(2)} - ROI Penalty ${roiPenalty.toFixed(2)} (50% of ${totalROICredited.toFixed(2)})
                         </p>
                       </motion.div>
                     );
                   })()}
                 </div>
               </div>
-              
+
               {/* Modal Footer */}
               <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-2xl">
                 <div className="flex gap-3">

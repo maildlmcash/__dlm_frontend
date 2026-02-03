@@ -34,7 +34,6 @@ const Breakdown = () => {
   const [deductionPercent, setDeductionPercent] = useState(20);
   const [refundTimeline, setRefundTimeline] = useState(30);
   const [refundRequests, setRefundRequests] = useState<RefundRequest[]>([]);
-  const [refundHistory, setRefundHistory] = useState<RefundRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [processing, setProcessing] = useState<string | null>(null);
@@ -70,7 +69,6 @@ const Breakdown = () => {
         const data = response.data as any;
         const requests = Array.isArray(data) ? data : data.data || [];
         setRefundRequests(requests.filter((r: RefundRequest) => r.status === 'PENDING' || r.status === 'APPROVED'));
-        setRefundHistory(requests.filter((r: RefundRequest) => r.status === 'APPROVED' || r.status === 'REJECTED'));
       }
     } catch (error) {
       console.error('Failed to load refund requests:', error);
@@ -212,11 +210,10 @@ const Breakdown = () => {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-3 py-1 text-sm rounded ${
-                    filter === f
+                  className={`px-3 py-1 text-sm rounded ${filter === f
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                    }`}
                 >
                   {f.charAt(0).toUpperCase() + f.slice(1)}
                 </button>
@@ -235,11 +232,10 @@ const Breakdown = () => {
                 <div key={request.id} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">Request #{request.id.substring(0, 8)}</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      request.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
-                      request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs ${request.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                        request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'
+                      }`}>
                       {request.status}
                     </span>
                   </div>
@@ -287,7 +283,7 @@ const Breakdown = () => {
         </div>
       </div>
 
-      
+
 
       <ConfirmDialog
         isOpen={isOpen}

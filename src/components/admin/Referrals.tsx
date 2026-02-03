@@ -11,10 +11,6 @@ interface ReferralIncome {
   createdAt: string;
 }
 
-interface ReferralConfig {
-  level: number;
-  commissionPercent: number;
-}
 
 interface LevelConfig {
   salary: number;
@@ -26,10 +22,6 @@ const Referrals = () => {
   const [activeTab, setActiveTab] = useState<'config' | 'income' | 'tree'>('config');
   const [referralIncome, setReferralIncome] = useState<ReferralIncome[]>([]);
   const [loading, setLoading] = useState(false);
-  const [levels, setLevels] = useState<ReferralConfig[]>([
-    { level: 1, commissionPercent: 10 },
-    { level: 2, commissionPercent: 5 },
-  ]);
   const [levelConfigs, setLevelConfigs] = useState<LevelConfig[]>([
     { salary: 100, turnover: 1000, timeline: 30 },
   ]);
@@ -43,8 +35,8 @@ const Referrals = () => {
   const loadReferralIncome = async () => {
     setLoading(true);
     try {
-      const response = await adminApi.getAllTransactions({ 
-        type: 'REFERRAL' 
+      const response = await adminApi.getAllTransactions({
+        type: 'REFERRAL'
       });
       if (response.success && response.data) {
         const data = response.data as any;
@@ -57,9 +49,6 @@ const Referrals = () => {
     }
   };
 
-  const handleUpdateLevel = (level: number, percent: number) => {
-    setLevels(levels.map(l => l.level === level ? { ...l, commissionPercent: percent } : l));
-  };
 
   const addLevelConfig = () => {
     setLevelConfigs([
@@ -97,31 +86,28 @@ const Referrals = () => {
           <div className="flex">
             <button
               onClick={() => setActiveTab('config')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm ${
-                activeTab === 'config'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+              className={`px-6 py-3 border-b-2 font-medium text-sm ${activeTab === 'config'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
             >
               Level Config
             </button>
             <button
               onClick={() => setActiveTab('income')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm ${
-                activeTab === 'income'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+              className={`px-6 py-3 border-b-2 font-medium text-sm ${activeTab === 'income'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
             >
               Referral Income
             </button>
             <button
               onClick={() => setActiveTab('tree')}
-              className={`px-6 py-3 border-b-2 font-medium text-sm ${
-                activeTab === 'tree'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+              className={`px-6 py-3 border-b-2 font-medium text-sm ${activeTab === 'tree'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
             >
               Referral Tree
             </button>
@@ -139,13 +125,13 @@ const Referrals = () => {
                     <p className="text-sm text-purple-700 mt-1">Configure salary levels with turnover requirements and timelines</p>
                   </div>
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={addLevelConfig}
                       className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 whitespace-nowrap"
                     >
                       + Add Level
                     </button>
-                    <button 
+                    <button
                       onClick={saveLevelConfigs}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 whitespace-nowrap"
                     >
@@ -172,7 +158,7 @@ const Referrals = () => {
                             🗑️ Remove
                           </button>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           {/* Salary */}
                           <div>
